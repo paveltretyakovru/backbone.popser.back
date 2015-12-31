@@ -1,38 +1,49 @@
 <?php namespace App\Http\Controllers\Auth;
 
+use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Auth\Registrar;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+
+use Illuminate\Http\Request;
+
+use Auth;
+use App\User;
 
 class AuthController extends Controller {
 
-	/*
-	|--------------------------------------------------------------------------
-	| Registration & Login Controller
-	|--------------------------------------------------------------------------
-	|
-	| This controller handles the registration of new users, as well as the
-	| authentication of existing users. By default, this controller uses
-	| a simple trait to add these behaviors. Why don't you explore it?
-	|
-	*/
+	public function postLogin( Request $request )
+	{
+		$this->validate( $request , [
+			'email'		=> 'required|email' ,
+			'password'	=> 'required|min:5'
+		]);
+	}
 
-	use AuthenticatesAndRegistersUsers;
+	public function postRegistrate( Request $request )
+	{
+		$this->validate( $request , [
+			'name'		=> 'required' ,
+			'email'		=> 'required|email|unique' ,
+			'password'	=> 'required|min:5'
+		]);
+
+		$user = User::create( $request->all() );
+		
+		if( $user )
+		{
+			return response()->json( [ 'result'	=> 'success' ] );
+		} else {
+			return response()->json( [ 'result' => 'failed' , 'message' => 'Ошибка при создании записи' ] );
+		}
+	}
 
 	/**
-	 * Create a new authentication controller instance.
+	 * Проверяет авторизован ли пользователь 
 	 *
-	 * @param  \Illuminate\Contracts\Auth\Guard  $auth
-	 * @param  \Illuminate\Contracts\Auth\Registrar  $registrar
-	 * @return void
+	 * @return json с булевым параметром auth
 	 */
-	public function __construct(Guard $auth, Registrar $registrar)
+	public function getCheck()
 	{
-		$this->auth = $auth;
-		$this->registrar = $registrar;
-
-		$this->middleware('guest', ['except' => 'getLogout']);
+		return response()->json( [ 'auth' => Auth::check() , 'token' => csrf_token() ]);
 	}
 
 }
