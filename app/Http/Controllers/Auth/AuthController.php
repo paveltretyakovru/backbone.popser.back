@@ -27,12 +27,20 @@ class AuthController extends Controller {
 
 		if( Auth::attempt([ 'email' => $email , 'password' => $password ]) )
 		{
-			return response()->json([]);
+			return response()->json( $this->getUserInfo( $request ) );
 		} else {
 			return response( [
 				'message' => 'Неправильно введены логин и/или пароль. Пожалуйста, попробуйте еще раз'
 			] , 422)->header( 'Content-Type' , 'application/json' );
 		}
+	}
+
+	private function getUserInfo( Request $request ){
+		return [
+			'id'	=> $request->user()->id 	,
+			'name'	=> $request->user()->name ,
+			'email'	=> $request->user()->email
+		];
 	}
 
 	public function postRegister( Request $request )
@@ -52,7 +60,10 @@ class AuthController extends Controller {
 
 		if( $user )
 		{
-			return response()->json( [ 'result'	=> 'success' ] );
+			return response()->json([
+				'result' => 'success' ,
+				'user'	 => [ 'name' => $user->name , 'email' => $user->email ]
+			]);
 		} else {
 			return response()->json( [ 'result' => 'failed' , 'message' => 'Ошибка при создании записи' ] );
 		}
@@ -63,9 +74,17 @@ class AuthController extends Controller {
 	 *
 	 * @return json с булевым параметром auth
 	 */
-	public function getCheck()
+	public function getCheck( Request $request )
 	{
-		return response()->json( [ 'auth' => Auth::check() , 'token' => csrf_token() ]);
+		if( Auth::check() )
+		{
+			return response()->json(
+				[ 'auth' => true  , 'token' => csrf_token() , 'user' => $this->getUserInfo( $request ) ]
+			);	
+		} else {
+			return response()->json( [ 'auth' => false , 'token' => csrf_token() ]);
+		}
+		
 	}
 
 }
