@@ -27,7 +27,7 @@ class AuthController extends Controller {
 
 		if( Auth::attempt([ 'email' => $email , 'password' => $password ]) )
 		{
-			return response()->json( $this->getUserInfo( $request ) );
+			return response()->json( [ 'user' => $this->getUserInfo( $request ) ] );
 		} else {
 			return response( [
 				'message' => 'Неправильно введены логин и/или пароль. Пожалуйста, попробуйте еще раз'
