@@ -12,7 +12,7 @@ class AuthController extends Controller {
 
 	public function getLogout( Request $request ){
 		Auth::logout();
-		return $this->getCheck();
+		return $this->getCheck( $request );
 	}
 
 	public function postLogin( Request $request )
