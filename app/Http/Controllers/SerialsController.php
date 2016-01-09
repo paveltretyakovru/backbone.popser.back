@@ -133,12 +133,10 @@ class SerialsController extends Controller {
 	public function update(Request $request , $id)
 	{
 		$user_id = $request->user()->id;
-		$catalog = Catalog::where([
-			'user_id'	=> $user_id ,
-			'serial_id'	=> $id
-		])->first();
+		$catalog = Catalog::find( $id );
 
-		if( $catalog->count() ){
+		if( $catalog && $catalog->user_id == $user_id ){
+
 			$this->validate( $request , [
 				'season' 	=> 'required' ,
 				'serie' 	=> 'required'
@@ -149,7 +147,7 @@ class SerialsController extends Controller {
 
 			$catalog->save();
 
-			return response()->json( $catalog->toJson() );
+			return response()->json( $catalog->toArray() );
 		} else {
 			return response( [
 				'message' => 'Не найдено записи'
