@@ -61,13 +61,16 @@ class SerialsController extends Controller {
 						'message' => 'У Вас уже есть сериал с таким названием'
 					] , 422)->header( 'Content-Type' , 'application/json' );
 				} else {
+
 					// Иначе добавляем пользователю в каталог сериал
 					$catalog 			= new Catalog();
 					$catalog->user_id 	= $user_id;
-					$catalog->serial_id = $serial->id;
+					$catalog->serial_id = $serial->first()->id;
 					$catalog->title 	= $title;
 					$catalog->season 	= 0;
 					$catalog->serie 	= 0;
+
+					$catalog->save();
 
 					return response()->json( $catalog->toArray() );
 				}
@@ -161,9 +164,19 @@ class SerialsController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function destroy( Request $request , $id )
 	{
-		//
+		$catalog = Catalog::find( $id );
+
+		if( $catalog && $catalog->user_id == $request->user()->id ){
+			$catalog->delete();
+
+			return response()->json([ 'result'	=> 'success' , 'message' => 'Запись успешно удалена' ]);
+		} else {
+			return response( [
+				'message' => 'Не найдено записи'
+			] , 422)->header( 'Content-Type' , 'application/json' );
+		}
 	}
 
 }

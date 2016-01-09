@@ -15,9 +15,9 @@
 </IfModule>
 
 
-<Limit GET POST PUT OPTIONS>
+<Limit GET POST PUT DELETE OPTIONS>
     Require all granted
 </Limit>
-<LimitExcept GET POST PUT OPTIONS>
+<LimitExcept GET POST PUT DELETE OPTIONS>
     Require all denied
 </LimitExcept>

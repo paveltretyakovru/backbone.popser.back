@@ -18,7 +18,7 @@ Route::resource('user'		, 'UsersController' , [
 		'only'	=> 'store'
 	]);
 Route::resource('serial' 	, 'SerialsController' , [
-		'only'	=> [ 'store' , 'update' ]
+		'only'	=> [ 'store' , 'update' , 'destroy' ]
 	]);
 
 Route::controllers([
