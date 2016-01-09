@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Serial;
+use App\Catalog;
 
 class SerialController extends Controller {
 
@@ -37,10 +38,71 @@ class SerialController extends Controller {
 	 */
 	public function store(Request $request)
 	{
-		
+		$title 		= $request->get('title');
+		$user_id 	= $request->user()->id;
+
+		if( !empty( $title ) )
+		{
+			
+			$serial = Serial::where( 'title' , $title )->get();
+
+			// Сериал с таким названием уже был создан ранее
+			if( $serial->count() )
+			{
+				
+				$catalog = Catalog::where([
+					'user_id'	=> $user_id ,
+					'serial_id'	=> $serial->first()->id
+				])->get();
+
+				// У пользователя уже есть в списке этот сериал
+				if( $catalog->count() ) {
+					return response( [
+						'message' => 'У Вас уже есть сериал с таким названием'
+					] , 422)->header( 'Content-Type' , 'application/json' );
+				} else {
+					// Иначе добавляем пользователю в каталог сериал
+					$catalog 			= new Catalog();
+					$catalog->user_id 	= $user_id;
+					$catalog->serial_id = $serial->id;
+					$catalog->title 	= $title;
+					$catalog->season 	= 0;
+					$catalog->serie 	= 0;
+
+					return response()->json( $catalog->toArray() );
+				}
+
+			// Такого сериала еще не создано, поэтому создаем запись,
+			// и добавляем в каталог пользователя
+			} else {
+				$new_serial 		= new Serial();
+				$new_serial->title 	= $title;
+				$new_serial->user_id= $user_id;
+
+				$new_serial->save();
+
+				$catalog = new Catalog();
+				$catalog->user_id 	= $user_id;
+				$catalog->serial_id = $new_serial->id;
+				$catalog->title 	= $title;
+				$catalog->season 	= 0;
+				$catalog->serie 	= 0;
+
+				$catalog->save();
+
+				return response()->json( $catalog->toArray() );
+			}
+
+			return $serial;
+			
+		} else {
+			return response( [
+				'message' => 'Поле не может быть пустым'
+			] , 422)->header( 'Content-Type' , 'application/json' );
+		}
 	}
 
-	/**
+	/**check isset in data table
 	 * Display the specified resource.
 	 *
 	 * @param  int  $id
