@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Auth;
 use App\User;
 use App\Catalog;
+use DB;
 
 class AuthController extends Controller {
 
@@ -65,7 +66,8 @@ class AuthController extends Controller {
 		{
 			return response()->json([
 				'result' => 'success' ,
-				'user'	 => [ 'name' => $user->name , 'email' => $user->email , 'serials' => [] ]
+				'user'	 => [ 'name' => $user->name , 'email' => $user->email , 'serials' => [] ] ,
+				'serials'=> $this->getSerials()
 			]);
 		} else {
 			return response()->json( [ 'result' => 'failed' , 'message' => 'Ошибка при создании записи' ] );
@@ -82,12 +84,16 @@ class AuthController extends Controller {
 		if( Auth::check() )
 		{
 			return response()->json(
-				[ 'auth' => true  , 'token' => csrf_token() , 'user' => $this->getUserInfo( $request ) ]
+				[ 'auth' => true  , 'token' => csrf_token() , 'user' => $this->getUserInfo( $request ) , 'serials' => $this->getSerials() ]
 			);	
 		} else {
-			return response()->json( [ 'auth' => false , 'token' => csrf_token() ]);
+			return response()->json( [ 'auth' => false , 'token' => csrf_token() , 'serials' => $this->getSerials() ]);
 		}
 		
+	}
+
+	private function getSerials(){
+		return DB::table('serials')->select( 'id' , 'title' )->get();
 	}
 
 }

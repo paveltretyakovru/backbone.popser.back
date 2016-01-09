@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Serial;
 use App\Catalog;
 
-class SerialController extends Controller {
+class SerialsController extends Controller {
 
 	use Stores\CatalogStore;
 
@@ -130,9 +130,31 @@ class SerialController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
+	public function update(Request $request , $id)
 	{
-		//
+		$user_id = $request->user()->id;
+		$catalog = Catalog::where([
+			'user_id'	=> $user_id ,
+			'serial_id'	=> $id
+		])->first();
+
+		if( $catalog->count() ){
+			$this->validate( $request , [
+				'season' 	=> 'required' ,
+				'serie' 	=> 'required'
+			]);
+
+			$catalog->season = $request->get('season');
+			$catalog->serie  = $request->get('serie');
+
+			$catalog->save();
+
+			return response()->json( $catalog->toJson() );
+		} else {
+			return response( [
+				'message' => 'Не найдено записи'
+			] , 422)->header( 'Content-Type' , 'application/json' );
+		}
 	}
 
 	/**

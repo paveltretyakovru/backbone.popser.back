@@ -14,11 +14,11 @@
 Route::get('/', 'WelcomeController@index');
 Route::get('home', 'HomeController@index');
 
-Route::resource('users'		, 'UsersController' , [
+Route::resource('user'		, 'UsersController' , [
 		'only'	=> 'store'
 	]);
-Route::resource('serial' 	, 'SerialController' , [
-		'only'	=> 'store'
+Route::resource('serial' 	, 'SerialsController' , [
+		'only'	=> [ 'store' , 'update' ]
 	]);
 
 Route::controllers([
