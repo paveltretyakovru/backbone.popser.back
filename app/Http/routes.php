@@ -12,10 +12,14 @@
 */
 
 Route::get('/', 'WelcomeController@index');
-
 Route::get('home', 'HomeController@index');
 
-Route::resource('users', 'UsersController');
+Route::resource('users'		, 'UsersController' , [
+		'only'	=> 'store'
+	]);
+Route::resource('serial' 	, 'SerialController' , [
+		'only'	=> 'store'
+	]);
 
 Route::controllers([
 	'auth'	=> 'Auth\AuthController'
