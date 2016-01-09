@@ -4,8 +4,11 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use App\Serial;
 
 class SerialController extends Controller {
+
+	use Stores\CatalogStore;
 
 	/**
 	 * Display a listing of the resource.
@@ -32,9 +35,9 @@ class SerialController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store()
+	public function store(Request $request)
 	{
-		//
+		
 	}
 
 	/**

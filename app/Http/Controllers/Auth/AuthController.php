@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use Auth;
 use App\User;
+use App\Catalog;
 
 class AuthController extends Controller {
 
@@ -35,11 +36,13 @@ class AuthController extends Controller {
 		}
 	}
 
-	private function getUserInfo( Request $request ){
+	public function getUserInfo( Request $request )
+	{
 		return [
-			'id'	=> $request->user()->id 	,
-			'name'	=> $request->user()->name ,
-			'email'	=> $request->user()->email
+			'id'		=> $request->user()->id 	,
+			'name'		=> $request->user()->name 	,
+			'email'		=> $request->user()->email 	,
+			'catalogs'	=> $request->user()->catalogs
 		];
 	}
 
@@ -62,7 +65,7 @@ class AuthController extends Controller {
 		{
 			return response()->json([
 				'result' => 'success' ,
-				'user'	 => [ 'name' => $user->name , 'email' => $user->email ]
+				'user'	 => [ 'name' => $user->name , 'email' => $user->email , 'serials' => [] ]
 			]);
 		} else {
 			return response()->json( [ 'result' => 'failed' , 'message' => 'Ошибка при создании записи' ] );
