@@ -10,6 +10,7 @@ use App\Catalog;
 class SerialsController extends Controller {
 
 	use Stores\CatalogStore;
+	use Stores\LinkStore;
 
 	/**
 	 * Display a listing of the resource.
@@ -137,20 +138,19 @@ class SerialsController extends Controller {
 	{
 		$user_id = $request->user()->id;
 		$catalog = Catalog::find( $id );
-
 		if( $catalog && $catalog->user_id == $user_id ){
-
 			$this->validate( $request , [
 				'season' 	=> 'required' ,
 				'serie' 	=> 'required'
 			]);
-
+			// Сохраняем  изменения пользователя
 			$catalog->season = $request->get('season');
 			$catalog->serie  = $request->get('serie');
 			$catalog->link 	 = $request->get('link');
-
 			$catalog->save();
-
+			// Заносим ссылку в базу данных
+			$this->storeLink( $request , $catalog->serial_id );
+			// Возвращаем обновленную модель пользователю
 			return response()->json( $catalog->toArray() );
 		} else {
 			return response( [
