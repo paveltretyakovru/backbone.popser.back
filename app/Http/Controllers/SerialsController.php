@@ -147,6 +147,7 @@ class SerialsController extends Controller {
 
 			$catalog->season = $request->get('season');
 			$catalog->serie  = $request->get('serie');
+			$catalog->link 	 = $request->get('link');
 
 			$catalog->save();
 
