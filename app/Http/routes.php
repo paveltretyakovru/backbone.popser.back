@@ -20,6 +20,9 @@ Route::resource('user'		, 'UsersController' , [
 Route::resource('serial' 	, 'SerialsController' , [
 		'only'	=> [ 'store' , 'update' , 'destroy' ]
 	]);
+Route::resource('link' , 'LinksController' , [
+		'only'	=> [ 'index' ]
+	]);
 
 Route::controllers([
 	'auth'	=> 'Auth\AuthController'
