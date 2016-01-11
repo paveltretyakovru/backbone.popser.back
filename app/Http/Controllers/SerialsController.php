@@ -39,7 +39,7 @@ class SerialsController extends Controller {
 	 */
 	public function store(Request $request)
 	{
-		$title 		= $request->get('title');
+		$title 		= strtolower($request->get('title'));
 		$user_id 	= $request->user()->id;
 
 		if( !empty( $title ) )
@@ -144,9 +144,10 @@ class SerialsController extends Controller {
 				'serie' 	=> 'required'
 			]);
 			// Сохраняем  изменения пользователя
-			$catalog->season = $request->get('season');
-			$catalog->serie  = $request->get('serie');
-			$catalog->link 	 = $request->get('link');
+			$catalog->season 	= $request->get('season');
+			$catalog->serie  	= $request->get('serie');
+			$catalog->link 	 	= $request->get('link');
+			$catalog->lastlink	= $request->get('lastlink');
 			$catalog->save();
 			// Заносим ссылку в базу данных
 			$this->storeLink( $request , $catalog->serial_id );

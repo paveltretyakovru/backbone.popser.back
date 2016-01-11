@@ -16,14 +16,27 @@ class LinksController extends Controller {
 	}
  
 	public function index( Request $request ){
-		$serial = $request->get('serial');
+		$serial 	= $request->get('serial');
+		$serial_id 	= strtolower( $serial['serial_id'] );
+		$count_rand = 2;
+		$rand 		= [];
+		$result 	= [];
 		
-		$all = Link::where([ 'serial_id' => $serial['serial_id'] ]);
+		$all = Link::where([ 'serial_id' => $serial_id ]);
 		$just = $all->where([
-			'serial_id'	=> $serial['serial_id']
-		])->get();
+			'serial_id'	=> $serial_id
+		])->get()->toArray();
+		
+		if(count($just)){
+			$count_rand = ( $count_rand <= count( $just ) ) ? $count_rand : count( $just );
+			$rand 		= array_rand( $just , $count_rand );
+			
+			foreach ($rand as $key => $value) {
+				$result[] = $just[$value];
+			}
+		}
 
-		return response()->json( $just );
+		return response()->json( $result );
 	}
 
 }

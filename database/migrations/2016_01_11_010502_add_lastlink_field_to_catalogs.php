@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddLinkFieldToCatalogs extends Migration {
+class AddLastlinkFieldToCatalogs extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -14,7 +14,8 @@ class AddLinkFieldToCatalogs extends Migration {
 	{
 		Schema::table('catalogs', function(Blueprint $table)
 		{
-			$table->string('link')->after('title');
+			// Поле содержит автоматически сохраненную ссылку последней серии сериала
+			$table->string('lastlink')->nullable()->default(null)->after('link');
 		});
 	}
 
@@ -27,7 +28,7 @@ class AddLinkFieldToCatalogs extends Migration {
 	{
 		Schema::table('catalogs', function(Blueprint $table)
 		{
-			$table->dropColumn('link');
+			$table->dropColumn('lastlink');
 		});
 	}
 

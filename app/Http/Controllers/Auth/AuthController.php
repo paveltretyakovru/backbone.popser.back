@@ -24,7 +24,7 @@ class AuthController extends Controller {
 			'password'	=> 'required|min:5'
 		]);
 
-		$email 		= $request->get('email');
+		$email 		= strtolower($request->get('email'));
 		$password 	= $request->get('password');
 
 		if( Auth::attempt([ 'email' => $email , 'password' => $password ]) )
@@ -56,8 +56,8 @@ class AuthController extends Controller {
 		]);
 
 		$user = new User();
-		$user->name 	= $request->get( 'name' );
-		$user->email 	= $request->get( 'email');
+		$user->name 	= strtolower($request->get( 'name' ));
+		$user->email 	= strtolower($request->get( 'email'));
 		$user->password = bcrypt( $request->get( 'password' ) );
 
 		$user->save();

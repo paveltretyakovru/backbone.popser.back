@@ -6,9 +6,9 @@ use App\Link;
 trait LinkStore
 {
 	private function storeLink( Request $request , $serial_id ){
-		$link 		= $request->get('link');
-		$season 	= $request->get('season');
-		$serie 		= $request-> get('serie');
+		$link 		= strtolower($request->get('lastlink'));
+		$season 	= strtolower($request->get('season'));
+		$serie 		= strtolower($request-> get('serie'));
 		$user_id 	= $request->user()->id;
 		if( !empty($link) && !empty($serial_id) ){
 
