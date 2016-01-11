@@ -11,10 +11,9 @@ trait LinkStore
 		$serie 		= $request-> get('serie');
 		$user_id 	= $request->user()->id;
 		if( !empty($link) && !empty($serial_id) ){
+
 			$Link = Link::where([
 				'serial_id' => $serial_id ,
-				'season'	=> $season ,
-				'serie'		=> $serie ,
 				'url'		=> $link
 			])->get();
 
