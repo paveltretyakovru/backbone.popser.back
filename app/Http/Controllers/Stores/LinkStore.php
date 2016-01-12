@@ -7,6 +7,7 @@ trait LinkStore
 {
 	private function storeLink( Request $request , $serial_id ){
 		$link 		= strtolower($request->get('lastlink'));
+		$title 		= ( !empty( $request->get('titlelink') ) ) ? strtolower($request->get('titlelink')) : null;
 		$season 	= strtolower($request->get('season'));
 		$serie 		= strtolower($request-> get('serie'));
 		$user_id 	= $request->user()->id;
@@ -25,6 +26,7 @@ trait LinkStore
 				$NewLink->url 		= $link;
 				$NewLink->season 	= $season;
 				$NewLink->serie 	= $serie;
+				$NewLink->title 	= $title;
 
 				$NewLink->save();
 			}
