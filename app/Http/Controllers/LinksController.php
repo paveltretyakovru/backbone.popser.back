@@ -21,7 +21,7 @@ class LinksController extends Controller {
 		$count_rand = 2;
 		$rand 		= [];
 		$result 	= [];
-		
+
 		$all = Link::where([ 'serial_id' => $serial_id ]);
 		$just = $all->where([
 			'serial_id'	=> $serial_id
@@ -29,10 +29,15 @@ class LinksController extends Controller {
 		
 		if(count($just)){
 			$count_rand = ( $count_rand <= count( $just ) ) ? $count_rand : count( $just );
-			$rand 		= array_rand( $just , $count_rand );
-			
-			foreach ($rand as $key => $value) {
-				$result[] = $just[$value];
+			$rand 		= ( $count_rand ) ? array_rand( $just , $count_rand ) : [];
+
+			// array_rand может возвращать только число (не в масссиве)
+			if( is_array( $rand ) && count( $rand ) ){
+				foreach ($rand as $key => $value) {
+					$result[] = $just[$value];
+				}
+			} elseif( is_integer( $rand ) ) {
+				$result[]	= $just[ $rand ];
 			}
 		}
 
