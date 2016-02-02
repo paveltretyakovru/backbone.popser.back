@@ -1,8 +1,8 @@
 <html>
 	<head>
-		<title>Laravel</title>
-		
-		<link href='//fonts.googleapis.com/css?family=Lato:100' rel='stylesheet' type='text/css'>
+		<title>Popser! Расширения для Chrome, ведение учета сериалов</title>
+
+		<link href='//fonts.googleapis.com/css?family=Lato|Helvetica|Arial&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 
 		<style>
 			body {
@@ -13,7 +13,7 @@
 				color: #B0BEC5;
 				display: table;
 				font-weight: 100;
-				font-family: 'Lato';
+				font-family: Lato,Helvetica,Arial,sans-serif;
 			}
 
 			.container {
@@ -30,6 +30,8 @@
 			.title {
 				font-size: 96px;
 				margin-bottom: 40px;
+				color: #e74c3c;
+				text-transform: uppercase;
 			}
 
 			.quote {
@@ -40,8 +42,9 @@
 	<body>
 		<div class="container">
 			<div class="content">
-				<div class="title">Laravel 5</div>
-				<div class="quote">{{ Inspiring::quote() }}</div>
+				{!! HTML::image('images/cat_popcorn.png') !!}
+				<div class="title">Popser!</div>
+				<div class="quote">Воу! Сайт еще разрабатывается! Загляни чуть погодя :) </div>
 			</div>
 		</div>
 	</body>
