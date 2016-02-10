@@ -14,16 +14,18 @@
 Route::get('/', 'WelcomeController@index');
 Route::get('home', 'HomeController@index');
 
-Route::resource('user'		, 'UsersController' , [
-		'only'	=> 'store'
-	]);
-Route::resource('serial' 	, 'SerialsController' , [
-		'only'	=> [ 'store' , 'update' , 'destroy' ]
-	]);
-Route::resource('link' , 'LinksController' , [
-		'only'	=> [ 'index' ]
-	]);
+Route::group(['middleware' => 'cors'] , function(){
+	Route::resource('user'		, 'UsersController' , [
+			'only'	=> 'store'
+		]);
+	Route::resource('serial' 	, 'SerialsController' , [
+			'only'	=> [ 'store' , 'update' , 'destroy' ]
+		]);
+	Route::resource('link' , 'LinksController' , [
+			'only'	=> [ 'index' ]
+		]);
 
-Route::controllers([
-	'auth'	=> 'Auth\AuthController'
-]);
+	Route::controllers([
+		'auth'	=> 'Auth\AuthController'
+	]);
+});
